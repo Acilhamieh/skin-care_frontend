@@ -1,95 +1,62 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import Header from '@/components/Header';
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+    <>
+      <Header />
+      <main className="font-['Istok_Web']">
+        {/* Hero Section */}
+<section className="bg-white text-black py-16 px-6">
+  <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    {/* Left Section */}
+    <div className="flex flex-col justify-center">
+      <h1 className="text-5xl md:text-6xl font-bold font-['Instrument_Sans'] mb-6 leading-tight">
+        <span className="block">Your Skin</span>
+        <span className="block">Deserves The</span>
+        <span className="relative inline-block">
+          Best Care
+          <span className="absolute inset-x-0 bottom-0 h-3 bg-[#FFC8EF] -z-10 rounded-full"></span>
+        </span>
+      </h1>
+      <p className="text-lg mb-8 text-gray-600 font-light">
+        Sed ut perspiciatis unde omnis<br />
+        iste natus error sit voluptatem
+      </p>
+      <button className="bg-[#FFC8EF] text-black px-8 py-3 rounded-full hover:scale-105 transform transition w-fit font-medium">
+        Book now !
+      </button>
     </div>
+
+    {/* Right Section - You can keep your image here */}
+    <div className="flex justify-center">
+      <img
+        src="https://i.ibb.co/Wv2Dd0rY/skin-space.png"
+        alt="Skin Care"
+        className="rounded-[20px] w-full max-w-sm object-contain"
+      />
+    </div>
+  </div>
+</section>
+
+
+
+        {/* Services Section */}
+        <section className="bg-[#FFC8EF] py-16 px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="bg-white shadow rounded p-6 text-center">
+              <h3 className="text-xl font-semibold mb-2">Facial</h3>
+            </div>
+            <div className="bg-white shadow rounded p-6 text-center">
+              <h3 className="text-xl font-semibold mb-2">Makeup</h3>
+            </div>
+            <div className="bg-white shadow rounded p-6 text-center">
+              <h3 className="text-xxl font-semibold  mb-2">Lazer</h3>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </>
   );
 }

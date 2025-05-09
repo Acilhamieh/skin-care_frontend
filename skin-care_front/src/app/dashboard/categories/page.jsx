@@ -16,19 +16,19 @@ export default function CategoryDrawer() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get('http://localhost:4000/api/categories/');
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/`);
       setCategories(res.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
-
+  
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     const totalImages = [...images, ...selectedFiles].slice(0, 2);
     setImages(totalImages);
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -37,9 +37,9 @@ export default function CategoryDrawer() {
     images.forEach((image) => {
       formData.append('images', image);
     });
-
+  
     try {
-      await axios.post('http://localhost:4000/api/categories/addcategory', formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/addcategory`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setName('');
@@ -51,17 +51,17 @@ export default function CategoryDrawer() {
       console.error('Error adding category:', error);
     }
   };
-
+  
   const confirmDelete = async () => {
     try {
-      await axios.delete(`http://localhost:4000/api/categories/${deleteId}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/${deleteId}`);
       fetchCategories();
       setDeleteId(null);
     } catch (error) {
       console.error('Error deleting category:', error);
     }
   };
-
+  
   return (
     <>
       <button

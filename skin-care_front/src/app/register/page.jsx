@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -12,13 +14,14 @@ export default function RegisterPage() {
     phone: '',
   });
 
-  const [message, setMessage] = useState('');
+  const router = useRouter();
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const payload = {
       ...formData,
       age: Number(formData.age),
@@ -26,22 +29,34 @@ export default function RegisterPage() {
     };
 
     if (payload.age < 1) {
-      setMessage('Age must be greater than 0.');
+      toast.error('Age must be greater than 0.');
       return;
     }
 
     try {
-      const res = await fetch('http://localhost:5000/register', {
+      const res = await fetch('http://localhost:4000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error('Registration failed');
-      setMessage('Account created successfully!');
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || 'Registration failed');
+      }
+
+      toast.success('Account created successfully! Redirecting to login...', {
+        position: 'top-center',
+        autoClose: 2000,
+      });
+
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
     } catch (err) {
       console.error(err);
-      setMessage('Registration failed.');
+      toast.error(err.message || 'Registration failed.');
     }
   };
 
@@ -51,7 +66,7 @@ export default function RegisterPage() {
       style={{ backgroundImage: "url('https://i.ibb.co/DHpWWnHx/Background.png')" }}
     >
       <div className="flex bg-white bg-opacity-90 rounded-[20px] overflow-hidden shadow-lg w-full max-w-4xl mt-16 md:mt-7">
-        
+
         {/* Left image - 35% */}
         <div className="w-[35%] hidden md:block">
           <img
@@ -151,9 +166,6 @@ export default function RegisterPage() {
               Create an account
             </button>
           </form>
-          {message && (
-            <p className="text-sm text-center mt-4 text-gray-700">{message}</p>
-          )}
           <p className="mt-4 text-sm text-center text-gray-700">
             Already have an account?{' '}
             <a href="/login" className="text-black underline">Log in</a>

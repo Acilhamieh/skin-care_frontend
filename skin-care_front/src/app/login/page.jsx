@@ -1,14 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-
-  const [message, setMessage] = useState('');
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,17 +20,21 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:5000/login', {
+      const res = await fetch('http://localhost:4000/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error('Login failed');
-      setMessage('Login successful!');
+
+      toast.success('Login successful! Redirecting...');
+      setTimeout(() => {
+        router.push('/'); // Redirect to home page
+      }, 1500);
     } catch (err) {
       console.error(err);
-      setMessage('Login failed.');
+      toast.error('Login failed. Please check your credentials.');
     }
   };
 
@@ -37,8 +44,6 @@ export default function LoginPage() {
       style={{ backgroundImage: "url('https://i.ibb.co/cXk4Xz3r/Rectangle-5.png')" }}
     >
       <div className="flex bg-white bg-opacity-90 rounded-[20px] overflow-hidden shadow-lg w-full max-w-md mt-16 md:mt-7">
-        
-        {/* Right form - 100% (No left image) */}
         <div className="w-full p-8 md:p-10">
           <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">Log in </h2>
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,9 +80,6 @@ export default function LoginPage() {
               Log In
             </button>
           </form>
-          {message && (
-            <p className="text-sm text-center mt-4 text-gray-700">{message}</p>
-          )}
           <p className="mt-4 text-sm text-center text-gray-700">
             Don't have an account?{' '}
             <a href="/register" className="text-black underline">Create one</a>

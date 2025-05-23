@@ -20,17 +20,27 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const res = await fetch('http://localhost:4000/api/auth/login', {
+      const res = await fetch(`https://skin-care-backend-lav5.onrender.com/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include', // ⚠️ this allows cookie to be stored
         body: JSON.stringify(formData),
       });
 
       if (!res.ok) throw new Error('Login failed');
 
+      const data = await res.json(); // contains the user
+      const role = data.user?.role;
+
       toast.success('Login successful! Redirecting...');
+
       setTimeout(() => {
-        router.push('/'); // Redirect to home page
+        // 🔁 Redirect based on role
+        if (role === 'admin') {
+          router.push('/dashboard');
+        } else {
+          router.push('/');
+        }
       }, 1500);
     } catch (err) {
       console.error(err);

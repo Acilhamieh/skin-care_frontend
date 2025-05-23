@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Table from '@/components/Table';
 import EntityForm from '@/components/EntityForm';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function CategoryDrawer() {
   const [categories, setCategories] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({});
   const [deleteId, setDeleteId] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     fetchCategories();
@@ -16,10 +19,16 @@ export default function CategoryDrawer() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/`);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/`, {
+        withCredentials: true,
+      });
       setCategories(res.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        toast.error('Unauthorized. Please log in as admin.');
+        router.push('/login');
+      }
     }
   };
 
@@ -43,14 +52,16 @@ export default function CategoryDrawer() {
           formPayload,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true,
           }
         );
       } else {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/addcategory`,
+          `http://localhost:4000/api/categories/addcategory`,
           formPayload,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
+            withCredentials: true,
           }
         );
       }
@@ -60,6 +71,7 @@ export default function CategoryDrawer() {
       setIsOpen(false);
     } catch (error) {
       console.error('Error saving category:', error);
+      toast.error('Something went wrong. Please try again.');
     }
   };
 
@@ -76,11 +88,14 @@ export default function CategoryDrawer() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/${deleteId}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/categories/${deleteId}`, {
+        withCredentials: true,
+      });
       fetchCategories();
       setDeleteId(null);
     } catch (error) {
       console.error('Error deleting category:', error);
+      toast.error('Unauthorized or failed to delete.');
     }
   };
 
